@@ -12,15 +12,31 @@ export default function UsersPage() {
   }, []);
 
   async function loadUsers() {
-    const myId = localStorage.getItem("userId");
+  const myId = localStorage.getItem("userId");
 
-    const { data } = await supabase
-      .from("users")
-      .select("*")
-      .neq("id", myId);
+  if (!myId) return;
 
-    setUsers(data || []);
-  }
+  // 내 정보 조회
+  const { data: me } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", myId)
+    .single();
+
+  if (!me) return;
+
+  // 반대 성별만 보이게
+  const targetGender =
+    me.gender === "남" ? "여" : "남";
+
+  const { data } = await supabase
+    .from("users")
+    .select("*")
+    .neq("id", myId)
+    .eq("gender", targetGender);
+
+  setUsers(data || []);
+}
 
   async function sendLike(targetUser: any) {
     const myId = localStorage.getItem("userId");
