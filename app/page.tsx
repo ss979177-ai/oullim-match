@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import BottomNav from "../../components/BottomNav";
 
 export default function Home() {
   const [form, setForm] = useState({
@@ -27,6 +26,7 @@ export default function Home() {
         mbti: form.mbti,
         hobby: form.hobby,
         phone: form.phone,
+        gender: form.gender,
       })
       .select()
       .single();
